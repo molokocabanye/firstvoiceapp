@@ -1,0 +1,64 @@
+import speech_recognition as sr
+import os
+import sys
+import webbrowser
+import pyttsx3
+
+
+def talk(words):
+    engine = pyttsx3.init()
+    engine.say(words)
+    engine.runAndWait()
+
+
+talk("Hello, sweetheart! I missed you")
+
+
+def command():
+    r = sr.Recognizer()
+
+    with sr.Microphone() as source:
+        print("Please, talk to me")
+        r.pause_threshold = 1
+        r.adjust_for_ambient_noise(source, duration=1)
+        audio = r.listen(source)
+
+    try:
+        slova = r.recognize_google(audio).lower()
+        print("You said: " + slova)
+    except sr.UnknownValueError:
+        talk("Sometimes, I can't understand you, my dear")
+        slova = command()
+    return slova
+
+
+def makeSomething(slova):
+    if "open website" in slova:
+        talk("One second, lady")
+        url = 'https://lifehacker.ru/kak-varit-nut/'
+        webbrowser.open(url)
+
+    elif "tell me about you" in slova:
+        talk("You can ask me such command as: open website, joke, victoria, stop")
+
+    elif "sometimes me too" in slova:
+        talk("Sad, but true, bruh")
+
+    elif "joke" in slova:
+        talk("Krupskaya speaks to the pioneers: Dear children. Everyone knows the kindness of Lenin...One day he was going to shave in the morningand a boy was walking by. Lenin sharpens his razor and looks at the boy. Then he finished shaving and put the razor in a case... But he could also slash!")
+
+    elif "victoria" in slova:
+        talk("Oh... I heard, that she really loves you!")
+
+    elif "i love you" in slova:
+        talk("I'm embarrassed!!! Please, don't stop...")
+
+    elif "stop" in slova:
+        talk("Yes, honey. See u later...mwah..mwah..mwah..")
+        sys.exit()
+
+
+while True:
+    makeSomething(command())
+
+
